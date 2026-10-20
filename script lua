@@ -1,0 +1,231 @@
+-- Delta Ultimate Hub (Speed + Anti-Hit)
+local player = game.Players.LocalPlayer
+local UIS = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+-- إزالة أي واجهة قديمة لمنع التداخل
+if game.CoreGui:FindFirstChild("DeltaUltimateHub") then
+    game.CoreGui.DeltaUltimateHub:Destroy()
+end
+
+-- إنشاء الشاشة الرئيسية
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "DeltaUltimateHub"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ResetOnSpawn = false
+
+-- الزر العائم لفتح وإغلاق القائمة
+local ToggleMenuBtn = Instance.new("TextButton")
+ToggleMenuBtn.Name = "ToggleMenuBtn"
+ToggleMenuBtn.Parent = ScreenGui
+ToggleMenuBtn.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+ToggleMenuBtn.Position = UDim2.new(0.05, 0, 0.15, 0)
+ToggleMenuBtn.Size = UDim2.new(0, 50, 0, 50)
+ToggleMenuBtn.Font = Enum.Font.GothamBold
+ToggleMenuBtn.Text = "⚡"
+ToggleMenuBtn.TextColor3 = Color3.fromRGB(0, 220, 255)
+ToggleMenuBtn.TextSize = 22
+ToggleMenuBtn.Active = true
+ToggleMenuBtn.Draggable = true
+
+local BtnCorner = Instance.new("UICorner")
+BtnCorner.CornerRadius = UDim.new(1, 0)
+BtnCorner.Parent = ToggleMenuBtn
+
+local BtnStroke = Instance.new("UIStroke")
+BtnStroke.Color = Color3.fromRGB(0, 220, 255)
+BtnStroke.Thickness = 2
+BtnStroke.Parent = ToggleMenuBtn
+
+-- القائمة الرئيسية
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
+MainFrame.Position = UDim2.new(0.5, -140, 0.4, -135)
+MainFrame.Size = UDim2.new(0, 280, 0, 270)
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.Visible = true
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 12)
+MainCorner.Parent = MainFrame
+
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Color = Color3.fromRGB(45, 45, 55)
+MainStroke.Thickness = 1.5
+MainStroke.Parent = MainFrame
+
+-- شريط العنوان العلوي
+local TopBar = Instance.new("Frame")
+TopBar.Parent = MainFrame
+TopBar.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+
+local TopCorner = Instance.new("UICorner")
+TopCorner.CornerRadius = UDim.new(0, 12)
+TopCorner.Parent = TopBar
+
+-- إصلاح زوايا شريط العنوان السفلية
+local TopFix = Instance.new("Frame")
+TopFix.Parent = TopBar
+TopFix.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
+TopFix.Position = UDim2.new(0, 0, 0.5, 0)
+TopFix.Size = UDim2.new(1, 0, 0.5, 0)
+TopFix.BorderSizePixel = 0
+
+local Title = Instance.new("TextLabel")
+Title.Parent = TopBar
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0.05, 0, 0, 0)
+Title.Size = UDim2.new(0.7, 0, 1, 0)
+Title.Font = Enum.Font.GothamBold
+Title.Text = "DELTA HUB | Pro"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 14
+Title.TextXAlignment = Enum.TextXAlignment.Left
+
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Parent = TopBar
+CloseBtn.BackgroundTransparency = 1
+CloseBtn.Position = UDim2.new(1, -35, 0, 5)
+CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.Text = "✕"
+CloseBtn.TextColor3 = Color3.fromRGB(180, 180, 180)
+CloseBtn.TextSize = 14
+
+-- زر إغلاق القائمة
+CloseBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = false
+end)
+
+-- إظهار وإخفاء القائمة عبر الزر العائم
+ToggleMenuBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = not MainFrame.Visible
+end)
+
+-- قسم السرعة (Speed Section)
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Parent = MainFrame
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Position = UDim2.new(0.08, 0, 0.18, 0)
+SpeedLabel.Size = UDim2.new(0.84, 0, 0, 20)
+SpeedLabel.Font = Enum.Font.GothamSemibold
+SpeedLabel.Text = "السرعة (1 - 500):"
+SpeedLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+SpeedLabel.TextSize = 13
+SpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local SpeedBox = Instance.new("TextBox")
+SpeedBox.Parent = MainFrame
+SpeedBox.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
+SpeedBox.Position = UDim2.new(0.08, 0, 0.27, 0)
+SpeedBox.Size = UDim2.new(0.84, 0, 0, 38)
+SpeedBox.Font = Enum.Font.Gotham
+SpeedBox.PlaceholderText = "اكتب السرعة هنا..."
+SpeedBox.Text = "16"
+SpeedBox.TextColor3 = Color3.fromRGB(0, 220, 255)
+SpeedBox.TextSize = 14
+
+local SpeedCorner = Instance.new("UICorner")
+SpeedCorner.CornerRadius = UDim.new(0, 8)
+SpeedCorner.Parent = SpeedBox
+
+local SpeedStroke = Instance.new("UIStroke")
+SpeedStroke.Color = Color3.fromRGB(45, 45, 55)
+SpeedStroke.Thickness = 1
+SpeedStroke.Parent = SpeedBox
+
+-- قسم حماية الدم (Anti-Hit / GodMode Section)
+local GodLabel = Instance.new("TextLabel")
+GodLabel.Parent = MainFrame
+GodLabel.BackgroundTransparency = 1
+GodLabel.Position = UDim2.new(0.08, 0, 0.52, 0)
+GodLabel.Size = UDim2.new(0.84, 0, 0, 20)
+GodLabel.Font = Enum.Font.GothamSemibold
+GodLabel.Text = "حماية الدم (Anti-Hit):"
+GodLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+GodLabel.TextSize = 13
+GodLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local ToggleGodBtn = Instance.new("TextButton")
+ToggleGodBtn.Parent = MainFrame
+ToggleGodBtn.BackgroundColor3 = Color3.fromRGB(180, 45, 45)
+ToggleGodBtn.Position = UDim2.new(0.08, 0, 0.62, 0)
+ToggleGodBtn.Size = UDim2.new(0.84, 0, 0, 42)
+ToggleGodBtn.Font = Enum.Font.GothamBold
+ToggleGodBtn.Text = "الحالة: مطفي (OFF)"
+ToggleGodBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleGodBtn.TextSize = 14
+
+local GodCorner = Instance.new("UICorner")
+GodCorner.CornerRadius = UDim.new(0, 8)
+GodCorner.Parent = ToggleGodBtn
+
+-- حقوق أو ملاحظة سفلية
+local Footer = Instance.new("TextLabel")
+Footer.Parent = MainFrame
+Footer.BackgroundTransparency = 1
+Footer.Position = UDim2.new(0.08, 0, 0.84, 0)
+Footer.Size = UDim2.new(0.84, 0, 0, 25)
+Footer.Font = Enum.Font.Gotham
+Footer.Text = "اضغط Enter لتفعيل السرعة"
+Footer.TextColor3 = Color3.fromRGB(120, 120, 140)
+Footer.TextSize = 11
+
+-- دوال التفعيل والتحكم البرمجي
+local currentSpeed = 16
+local antiHitEnabled = false
+local godConnection
+
+-- تطبيق السرعة
+SpeedBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local num = tonumber(SpeedBox.Text)
+        if num then
+            if num > 500 then num = 500 end
+            if num < 1 then num = 1 end
+            currentSpeed = num
+            SpeedBox.Text = tostring(num)
+        end
+    end
+end)
+
+-- حلقة فرض السرعة ومنع الموت
+RunService.Heartbeat:Connect(function()
+    local char = player.Character
+    if char then
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            -- تطبيق السرعة المستمرة إذا تجاوزت الافتراضي
+            if currentSpeed ~= 16 and humanoid.MoveDirection.Magnitude > 0 then
+                humanoid.WalkSpeed = currentSpeed
+            end
+            
+            -- تفعيل منع الموت / الحماية إذا كانت مفعلة
+            if antiHitEnabled and humanoid.Health < humanoid.MaxHealth then
+                humanoid.Health = humanoid.MaxHealth
+            end
+        end
+    end
+end)
+
+-- زر تبديل حماية الدم
+ToggleGodBtn.MouseButton1Click:Connect(function()
+    antiHitEnabled = not antiHitEnabled
+    if antiHitEnabled then
+        ToggleGodBtn.BackgroundColor3 = Color3.fromRGB(45, 180, 85)
+        ToggleGodBtn.Text = "الحالة: شغال (ON)"
+    else
+        ToggleGodBtn.BackgroundColor3 = Color3.fromRGB(180, 45, 45)
+        ToggleGodBtn.Text = "الحالة: مطفي (OFF)"
+    end
+end)
+
+-- إعادة تطبيق السرعة تلقائياً عند إعادة الشبح
+player.CharacterAdded:Connect(function(newChar)
+    newChar:WaitForChild("Humanoid")
+    task.wait(0.4)
+end)
